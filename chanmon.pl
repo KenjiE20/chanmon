@@ -53,6 +53,9 @@
 # 	v1.7:	-fixture: Let chanmon be aware of nick_prefix/suffix
 # 			and allow custom prefix/suffix for chanmon buffer
 # 			(Defaults to <> if nothing set, and blank if there is)
+# 		-fix: Make dynamic monitoring aware of multiple windows
+# 			rather than just the active buffer
+# 		(Thanks to m4v for these)
 # 2009-09-07, KenjiE20 <longbow@longbowslair.co.uk>:
 #	v1.6:	-feature: colored buffer names
 #		-change: chanmon version sync
@@ -150,7 +153,7 @@ sub chanmon_new_message
 	my $nick = "";
 	my $outstr = "";
 	my $curbuf = "";
-	my $dyncheck = "0";
+	my $dyncheck = "1";
 
 #	DEBUG point
 #	$string = "\t"."0: ".$_[0]." 1: ".$_[1]." 2: ".$_[2]." 3: ".$_[3]." 4: ".$_[4]." 5: ".$_[5]." 6: ".$_[6]." 7: ".$_[7];
@@ -178,11 +181,23 @@ sub chanmon_new_message
 			{
 				if (weechat::config_get_plugin("dynamic") eq "on")
 				{
-					$curbuf = weechat::buffer_get_string(weechat::current_buffer(), 'name');
-					if ($bufname ne $curbuf)
+					@dynwindow = ();
+					$infolist = weechat::infolist_get("window", "","");
+					while (weechat::infolist_next($infolist))
 					{
-						$dyncheck = "1";
+						push (@dynwindow, weechat::infolist_pointer($infolist, "buffer"));
 					}
+
+					if (grep $_ eq $cb_bufferp, @dynwindow)
+					{
+						$dyncheck = "0";
+					}
+
+#					$curbuf = weechat::buffer_get_string(weechat::current_buffer(), 'name');
+#					if ($bufname ne $curbuf)
+#					{
+#						$dyncheck = "1";
+#					}
 				}
 
 				$bufname = $1.$2.$3;
@@ -271,11 +286,23 @@ sub chanmon_new_message
 			{
 				if (weechat::config_get_plugin("dynamic") eq "on")
 				{
-					$curbuf = weechat::buffer_get_string(weechat::current_buffer(), 'name');
-					if ($bufname ne $curbuf)
+					@dynwindow = ();
+					$infolist = weechat::infolist_get("window", "","");
+					while (weechat::infolist_next($infolist))
 					{
-						$dyncheck = "1";
+						push (@dynwindow, weechat::infolist_pointer($infolist, "buffer"));
 					}
+
+					if (grep $_ eq $cb_bufferp, @dynwindow)
+					{
+						$dyncheck = "0";
+					}
+
+#					$curbuf = weechat::buffer_get_string(weechat::current_buffer(), 'name');
+#					if ($bufname ne $curbuf)
+#					{
+#						$dyncheck = "1";
+#					}
 				}
 
 				$bufname = $1.$2.$3;
