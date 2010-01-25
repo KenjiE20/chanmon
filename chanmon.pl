@@ -134,6 +134,11 @@ This ".weechat::color("bold")."must".weechat::color("-bold")." be a valid color 
 ".weechat::color("bold")."/set plugins.var.perl.chanmon.show_aways".weechat::color("-bold")."
 Toggles showing the Weechat away messages
 
+".weechat::color("bold")."/set plugins.var.perl.chanmon.nick_prefix".weechat::color("-bold")."
+".weechat::color("bold")."/set plugins.var.perl.chanmon.nick_suffix".weechat::color("-bold")."
+Sets the prefix and suffix chars in the chanmon buffer
+(Defaults to <> if nothing set, and blank if there is)
+
 ".weechat::color("bold")."servername.#channel".weechat::color("-bold")."
 servername is the internal name for the server (set when you use /server add)
 #channel is the channel name, (where # is whatever channel type that channel happens to be)
