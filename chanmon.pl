@@ -1,6 +1,6 @@
 #
 # chanmon.pl - Channel Monitoring for weechat 0.3.0
-# Version 1.6
+# Version 1.7
 #
 # Add 'Channel Monitor' buffer that you can position to show IRC channel
 # messages in a single location without constantly switching buffers
@@ -31,6 +31,11 @@
 # /set plugins.var.perl.chanmon.show_aways
 # Toggles showing the Weechat away messages
 #
+# /set plugins.var.perl.chanmon.nick_prefix
+# /set plugins.var.perl.chanmon.nick_suffix
+# Sets the prefix and suffix chars in the chanmon buffer
+# (Defaults to <> if nothing set, and blank if there is)
+#
 # servername.#channel
 # servername is the internal name for the server (set when you use /server add)
 # #channel is the channel name, (where # is whatever channel type that channel happens to be)
@@ -44,6 +49,10 @@
 # /set weechat.bar.input.conditions "active"
 #
 # History:
+# 2010-01-25, KenjiE20 <longbow@longbowslair.co.uk>:
+# 	v1.7:	-fixture: Let chanmon be aware of nick_prefix/suffix
+# 			and allow custom prefix/suffix for chanmon buffer
+# 			(Defaults to <> if nothing set, and blank if there is)
 # 2009-09-07, KenjiE20 <longbow@longbowslair.co.uk>:
 #	v1.6:	-feature: colored buffer names
 #		-change: chanmon version sync
@@ -182,11 +191,11 @@ sub chanmon_new_message
 					if ($cb_high eq "1")
 					{
 						$uncolnick = weechat::string_remove_color($cb_prefix, "");
-						$nick = " <".weechat::color("chat_highlight").$uncolnick.weechat::color("reset").">";
+						$nick = " ".weechat::config_get_plugin("nick_prefix").weechat::color("chat_highlight").$uncolnick.weechat::color("reset").weechat::config_get_plugin("nick_suffix");
 					}
 					else
 					{
-						$nick = " <".$cb_prefix.weechat::color("reset").">";
+						$nick = " ".weechat::config_get_plugin("nick_prefix").$cb_prefix.weechat::color("reset").weechat::config_get_plugin("nick_suffix");
 					}
 				}
 				elsif ($cb_prefix =~ /--/)
@@ -476,7 +485,7 @@ sub print_help
 	return weechat::WEECHAT_RC_OK;
 }
 
-weechat::register("chanmon", "KenjiE20", "1.6", "GPL3", "Channel Monitor", "", "");
+weechat::register("chanmon", "KenjiE20", "1.7", "GPL3", "Channel Monitor", "", "");
 weechat::hook_print("", "", "", 0, "chanmon_new_message", "");
 weechat::hook_command("monitor", "Toggles monitoring for a channel (must be used in the channel buffer itself)", "", "", "", "chanmon_toggle", "");
 weechat::hook_command("dynmon", "Toggles 'dynamic' monitoring (auto-disable monitoring for current channel)", "", "", "", "chanmon_dyn_toggle", "");
@@ -507,4 +516,36 @@ if (!(weechat::config_is_set_plugin ("show_aways")))
 {
 	weechat::config_set_plugin("show_aways", "off");
 }
+
+# Check for exisiting prefix/suffix chars, and setup accordingly
+
+$prefix = weechat::config_get("irc.look.nick_prefix");
+$prefix = weechat::config_string($prefix);
+$suffix = weechat::config_get("irc.look.nick_suffix");
+$suffix = weechat::config_string($suffix);
+
+if (!(weechat::config_is_set_plugin("nick_prefix")))
+{
+	if ($prefix eq "" && $suffix eq "")
+	{
+		weechat::config_set_plugin("nick_prefix", "<");
+	}
+	else
+	{
+		weechat::config_set_plugin("nick_prefix", "");
+	}
+}
+
+if (!(weechat::config_is_set_plugin("nick_suffix")))
+{
+	if ($prefix eq "" && $suffix eq "")
+	{
+		weechat::config_set_plugin("nick_suffix", ">");
+	}
+	else
+	{
+		weechat::config_set_plugin("nick_suffix", "");
+	}
+}
+
 chanmon_buffer_open();
