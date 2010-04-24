@@ -716,7 +716,10 @@ sub chanmon_new_message
 			$mynick = weechat::info_get("irc_nick", $net);
 			if ($cb_msg =~ $mynick)
 			{
-				$nick = weechat::color("white")." *".$nick.weechat::color("reset");
+				$action_colour = weechat::color(weechat::config_string(weechat::config_get("weechat.color.chat_prefix_action")));
+				$action_prefix = weechat::config_string(weechat::config_get("weechat.look.prefix_action"));
+				$nick_self_colour = weechat::color(weechat::config_string(weechat::config_get("weechat.color.chat_nick_self")));
+				$nick = $action_colour.$action_prefix.$nick_self_colour.$nick.weechat::color("reset");
 				# Send to output
 				chanmon_print ($cb_msg, $cb_bufferp, $nick);
 			}
