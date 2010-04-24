@@ -66,6 +66,9 @@
 # /set weechat.bar.input.conditions "active"
 
 # History:
+# 2010-04-24, KenjiE20 <longbow@longbowslair.co.uk>:
+#		-fix: No longer using hard-coded detection for ACTION and
+#			TOPIC messages. Use config settings for ACTION printing
 # 2010-04-15, KenjiE20 <longbow@longbowslair.co.uk>:
 #	v1.9:	Rewrite for v2.0
 #		-feature: /monitor takes arguments
