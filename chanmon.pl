@@ -75,7 +75,7 @@
 #		-feature: /chanmon is now a command wrapper for all commands
 #			/help chanmon gives command help
 #			/chanmon help gives config help
-#		-code change: Made more subs to shirnk the code down in places
+#		-code change: Made more subs to shrink the code down in places
 #		-fix: Stop chanmon attempting to double load/hook
 # 2010-02-10, m4v <lambdae2@gmail.com>:
 #	v1.7.1:	-fix: chanmon was leaking infolists, changed how chanmon
