@@ -650,7 +650,7 @@ sub chanmon_new_message
 
 				# Format nick
 				# Line isn't action or topic notify
-				if (!($cb_prefix =~ / \*/) && !($cb_prefix =~ /--/))
+				if (!($cb_tags =~ /irc_action/) && !($cb_tags =~ /irc_topic/))
 				{
 					# Highlight
 					if ($cb_high eq "1")
@@ -668,7 +668,7 @@ sub chanmon_new_message
 					}
 				}
 				# Topic line
-				elsif ($cb_prefix =~ /--/)
+				elsif ($cb_tags =~ /irc_topic/)
 				{
 
 					$nick = " ".$cb_prefix.weechat::color("reset");
