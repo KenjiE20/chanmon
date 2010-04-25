@@ -47,7 +47,6 @@
 #  Changes the amount of lines the output bar will hold.
 #  (Only appears once output has been set to bar, defaults to 10)
 #
-#
 # /set plugins.var.perl.chanmon.nick_prefix
 # /set plugins.var.perl.chanmon.nick_suffix
 #  Sets the prefix and suffix chars in the chanmon buffer
@@ -231,7 +230,7 @@ sub chanmon_bar_build
 			$prefix_num = (index(weechat::string_remove_color($_, ""), " | "));
 			
 			# Make string
-			$str = $str.$bar_lines_time[$count]." ".(" " x ($align_num - $prefix_num)).$_."\r";
+			$str = $str.$bar_lines_time[$count]." ".(" " x ($align_num - $prefix_num)).$_."\n";
 			# Increment count for sync with time list
 			$count++;
 		}
