@@ -1,6 +1,6 @@
 #
 # chanmon.pl - Channel Monitoring for weechat 0.3.0
-# Version 1.9
+# Version 2.0
 #
 # Add 'Channel Monitor' buffer/bar that you can position to show IRC channel
 # messages in a single location without constantly switching buffers
@@ -65,6 +65,8 @@
 # /set weechat.bar.input.conditions "active"
 
 # History:
+# 2010-04-25, KenjiE20 <longbow@longbowslair.co.uk>:
+#	v2.0:	Release as version 2.0
 # 2010-04-24, KenjiE20 <longbow@longbowslair.co.uk>:
 #		-fix: No longer using hard-coded detection for ACTION and
 #			TOPIC messages. Use config settings for ACTION printing
