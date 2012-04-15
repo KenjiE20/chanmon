@@ -240,11 +240,12 @@ sub chanmon_bar_build
 {
 	# Get max lines
 	$max_lines = weechat::config_get_plugin("bar_lines");
+	$max_lines = $max_lines ? $max_lines : 10;
 	$str = '';
 	$align_num = 0;
 	$count = 0;
 	# Keep lines within max
-	while (@bar_lines > $max_lines)
+	while ($#bar_lines > $max_lines)
 	{
 		shift(@bar_lines);
 		shift(@bar_lines_time);
@@ -1098,7 +1099,7 @@ sub format_buffer_name
 }
 
 # Check result of register, and attempt to behave in a sane manner
-if (!weechat::register("chanmon", "KenjiE20", "2.3", "GPL3", "Channel Monitor", "", ""))
+if (!weechat::register("chanmon", "KenjiE20", "2.3.1", "GPL3", "Channel Monitor", "", ""))
 {
 	# Double load
 	weechat::print ("", "\tChanmon is already loaded");
