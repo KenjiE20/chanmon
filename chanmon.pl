@@ -1,6 +1,6 @@
 #
 # chanmon.pl - Channel Monitoring for weechat 0.3.0
-# Version 2.3
+# Version 2.3.1
 #
 # Add 'Channel Monitor' buffer/bar that you can position to show IRC channel
 # messages in a single location without constantly switching buffers
@@ -69,6 +69,8 @@
 # /set weechat.bar.input.conditions "active"
 
 # History:
+# 2012-04-15, KenjiE20 <longbow@longbowslair.co.uk>:
+#	v2.3.1:	-fix: Colour tags in bar timestamp string, bar error fixes from highmon
 # 2012-02-28, KenjiE20 <longbow@longbowslair.co.uk>:
 #	v2.3:	-feature: Added merge_private option to display private messages (default: off)
 # 2010-12-22, KenjiE20 <longbow@longbowslair.co.uk>:
