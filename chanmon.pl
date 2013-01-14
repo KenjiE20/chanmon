@@ -1,6 +1,6 @@
 #
 # chanmon.pl - Channel Monitoring for weechat 0.3.0
-# Version 2.3.1
+# Version 2.3.2
 #
 # Add 'Channel Monitor' buffer/bar that you can position to show IRC channel
 # messages in a single location without constantly switching buffers
@@ -60,15 +60,22 @@
 #  servername is the internal name for the server (set when you use /server add)
 #  #channel is the channel name, (where # is whatever channel type that channel happens to be)
 #
-# Ideal set up:
+# Example set up:
 # Split the layout 70/30 (or there abouts) horizontally and load
 # Optionally, make the status and input lines only show on active windows
 #
 # /window splith 70 --> open the chanmon buffer
 # /set weechat.bar.status.conditions "active"
 # /set weechat.bar.input.conditions "active"
+#
+
+# Bugs and feature requests at: https://github.com/KenjiE20/chanmon
 
 # History:
+# 2013-01-15, KenjiE20 <longbow@longbowslair.co.uk>:
+#	v2.3.2:	-fix: Let bar output use the string set in weechat's config option
+#			-add: github info
+#			-change: Ideal set up -> Example set up
 # 2012-04-15, KenjiE20 <longbow@longbowslair.co.uk>:
 #	v2.3.1:	-fix: Colour tags in bar timestamp string, bar error fixes from highmon
 # 2012-02-28, KenjiE20 <longbow@longbowslair.co.uk>:
@@ -222,7 +229,7 @@ Command wrapper for chanmon commands
  servername is the internal name for the server (set when you use /server add)
  #channel is the channel name, (where # is whatever channel type that channel happens to be)
 
-".weechat::color("bold")."Ideal set up:".weechat::color("-bold")."
+".weechat::color("bold")."Example set up:".weechat::color("-bold")."
 Split the layout 70/30 (or there abouts) horizontally and load
 Optionally, make the status and input lines only show on active windows
 
@@ -256,16 +263,17 @@ sub chanmon_bar_build
 	if (@bar_lines)
 	{
 		# Build loop
+		$sep = " ".weechat::config_string(weechat::config_get("weechat.look.prefix_suffix"))." ";
 		foreach(@bar_lines)
 		{
 			# Find max align needed
-			$prefix_num = (index(weechat::string_remove_color($_, ""), " | "));
+			$prefix_num = (index(weechat::string_remove_color($_, ""), $sep));
 			$align_num = $prefix_num if ($prefix_num > $align_num);
 		}		
 		foreach(@bar_lines)
 		{
 			# Get align for this line
-			$prefix_num = (index(weechat::string_remove_color($_, ""), " | "));
+			$prefix_num = (index(weechat::string_remove_color($_, ""), $sep));
 			
 			# Make string
 			$str = $str.$bar_lines_time[$count]." ".(" " x ($align_num - $prefix_num)).$_."\n";
@@ -616,6 +624,15 @@ sub chanmon_config_cb
 		}
 	
 	}
+	elsif ($name eq "weechat.look.prefix_suffix")
+	{
+		if (weechat::config_get_plugin("output") eq "bar")
+		{
+			@bar_lines = ();
+			weechat::print("", "\tchanmon: weechat.look.prefix_suffix changed, clearing chanmon bar");
+			weechat::bar_item_update("chanmon");
+		}
+	}
 	return weechat::WEECHAT_RC_OK;
 }
 
@@ -647,6 +664,7 @@ sub chanmon_hook
 	weechat::hook_command("chanmon", "Chanmon help", "[help] | [monitor [channel [server]]] | [dynmon] | [clean default|orphan|all]", "    help: Print help for chanmon\n monitor: Toggles monitoring for a channel (/chmonitor)\n  dynmon: Toggles 'dynamic' monitoring (auto-disable monitoring for current channel) (/dynmon)\n   clean: Chanmon config clean up (/chanclean)", "help || monitor %(irc_channels) %(irc_servers) || dynmon || clean default|orphan|all", "chanmon_command_cb", "");
 	
 	weechat::hook_config("plugins.var.perl.chanmon.*", "chanmon_config_cb", "");
+	weechat::hook_config("weechat.look.prefix_suffix", "chanmon_config_cb", "");
 }
 
 # Main body, Callback for hook_print
@@ -908,7 +926,7 @@ sub chanmon_print
 		push (@bar_lines_time, $time);
 		
 		# Change tab char
-		$delim = weechat::color(weechat::config_string(weechat::config_get("weechat.color.chat_delimiters")))." | ".weechat::color("reset");
+		$delim = " ".weechat::color(weechat::config_string(weechat::config_get("weechat.color.chat_delimiters"))).weechat::config_string(weechat::config_get("weechat.look.prefix_suffix")).weechat::color("reset")." ";
 		$outstr =~ s/\t/$delim/;
 		
 		push (@bar_lines, $outstr);
@@ -1101,7 +1119,7 @@ sub format_buffer_name
 }
 
 # Check result of register, and attempt to behave in a sane manner
-if (!weechat::register("chanmon", "KenjiE20", "2.3.1", "GPL3", "Channel Monitor", "", ""))
+if (!weechat::register("chanmon", "KenjiE20", "2.3.2", "GPL3", "Channel Monitor", "", ""))
 {
 	# Double load
 	weechat::print ("", "\tChanmon is already loaded");
