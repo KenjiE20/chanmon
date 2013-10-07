@@ -352,6 +352,11 @@ sub chanmon_buffer_input
 sub chanmon_buffer_close
 {
 	$chanmon_buffer = "";
+	# If user hasn't changed output style warn user
+	if (weechat::config_get_plugin("output") eq "buffer")
+	{
+		weechat::print("", "\tChanmon buffer has been closed but output is still set to bar, unusual results may occur. To recreate the buffer use ".weechat::color("bold")."/chanmon fix".weechat::color("-bold"));
+	}
 	return weechat::WEECHAT_RC_OK;
 }
 
@@ -396,6 +401,14 @@ sub chanmon_command_cb
 	elsif ($cmd eq "clean")
 	{
 		chanmon_config_clean($data, $buffer, $arg);
+	}
+	# Fix closed buffer
+	elsif ($cmd eq "fix")
+	{
+		if (weechat::config_get_plugin("output") eq "buffer" && $chanmon_buffer eq "")
+		{
+			chanmon_buffer_open();
+		}
 	}
 	return weechat::WEECHAT_RC_OK;
 }
