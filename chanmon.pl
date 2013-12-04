@@ -932,6 +932,7 @@ sub chanmon_print
 				$color = weechat::color($1);
 				$time =~ s/\$\{\w+\}/$color/;
 			}
+			$time .= weechat::color("reset");
 		}
 		else # Default string
 		{
