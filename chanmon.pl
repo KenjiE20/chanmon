@@ -408,6 +408,15 @@ sub chanmon_command_cb
 	{
 		chanmon_config_clean($data, $buffer, $arg);
 	}
+	# clearbar command
+	elsif ($cmd eq "clearbar")
+	{
+		if (weechat::config_get_plugin("output") eq "bar")
+		{
+			@bar_lines = ();
+			weechat::bar_item_update("chanmon");
+		}
+	}
 	# Fix closed buffer
 	elsif ($cmd eq "fix")
 	{
@@ -680,7 +689,7 @@ sub chanmon_hook
 	weechat::hook_command("dynmon", "Toggles 'dynamic' monitoring (auto-disable monitoring for current channel)", "", "", "", "chanmon_dyn_toggle", "");
 	weechat::hook_command("chanclean", "Chanmon config clean up", "default|orphan|all", " default: Cleans all config entries with the default \"on\" value\n  orphan: Cleans all config entries for channels you aren't currently joined\n     all: Does both defaults and orphan", "default|orphan|all", "chanmon_config_clean", "");
 	
-	weechat::hook_command("chanmon", "Chanmon help", "[help] | [monitor [channel [server]]] | [dynmon] | [clean default|orphan|all]", "    help: Print help for chanmon\n monitor: Toggles monitoring for a channel (/chmonitor)\n  dynmon: Toggles 'dynamic' monitoring (auto-disable monitoring for current channel) (/dynmon)\n   clean: Chanmon config clean up (/chanclean)", "help || monitor %(irc_channels) %(irc_servers) || dynmon || clean default|orphan|all", "chanmon_command_cb", "");
+	weechat::hook_command("chanmon", "Chanmon help", "[help] | [monitor [channel [server]]] | [dynmon] | [clean default|orphan|all] | clearbar", "    help: Print help for chanmon\n monitor: Toggles monitoring for a channel (/chmonitor)\n  dynmon: Toggles 'dynamic' monitoring (auto-disable monitoring for current channel) (/dynmon)\n   clean: Chanmon config clean up (/chanclean)\nclearbar: Clear Chanmon bar", "help || monitor %(irc_channels) %(irc_servers) || dynmon || clean default|orphan|all || clearbar", "chanmon_command_cb", "");
 	
 	weechat::hook_config("plugins.var.perl.chanmon.*", "chanmon_config_cb", "");
 	weechat::hook_config("weechat.look.prefix_suffix", "chanmon_config_cb", "");
