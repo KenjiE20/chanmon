@@ -794,7 +794,7 @@ sub chanmon_new_message
 					}
 				}
 				# Send to output
-				chanmon_print ($cb_msg, $cb_bufferp, $nick);
+				chanmon_print ($cb_msg, $cb_bufferp, $nick, $cb_date, $cb_tags);
 			}
 		}
 	}
@@ -826,7 +826,7 @@ sub chanmon_new_message
 				$nick_self_colour = weechat::color(weechat::config_string(weechat::config_get("weechat.color.chat_nick_self")));
 				$nick = $action_colour.$action_prefix.$nick_self_colour.$nick.weechat::color("reset");
 				# Send to output
-				chanmon_print ($cb_msg, $cb_bufferp, $nick);
+				chanmon_print ($cb_msg, $cb_bufferp, $nick, $cb_date, $cb_tags);
 			}
 		}
 	}
@@ -839,6 +839,8 @@ sub chanmon_print
 	$cb_msg = $_[0];
 	my $cb_bufferp = $_[1] if ($_[1]);
 	my $nick = $_[2] if ($_[2]);
+	my $cb_date = $_[3] if ($_[3]);
+	my $cb_tags = $_[4] if ($_[4]);
 	
 	#Normal channel message
 	if ($cb_bufferp && $nick)
@@ -941,13 +943,27 @@ sub chanmon_print
 		# Search for and confirm buffer
 		$chanmon_buffer = weechat::buffer_search("perl", "chanmon");
 		# Print
-		weechat::print($chanmon_buffer, $outstr);
+		if ($cb_date)
+		{
+			weechat::print_date_tags($chanmon_buffer, $cb_date, $cb_tags, $outstr);
+		}
+		else
+		{
+			weechat::print($chanmon_buffer, $outstr)
+		}
 	}
 	elsif (weechat::config_get_plugin("output") eq "bar")
 	{
 		# Add time string
 		use POSIX qw(strftime);
-		$time = strftime(weechat::config_string(weechat::config_get("weechat.look.buffer_time_format")), localtime);
+		if ($cb_date)
+		{
+			$time = strftime(weechat::config_string(weechat::config_get("weechat.look.buffer_time_format")), localtime($cb_date));
+		}
+		else
+		{
+			$time = strftime(weechat::config_string(weechat::config_get("weechat.look.buffer_time_format")), localtime);
+		}
 		# Colourise
 		if ($time =~ /\$\{(?:color:)?[\w,]+\}/) # Coloured string
 		{
