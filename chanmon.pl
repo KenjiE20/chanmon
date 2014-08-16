@@ -64,11 +64,11 @@
 #
 # Example set up:
 # Split the layout 70/30 (or there abouts) horizontally and load
-# Optionally, make the status and input lines only show on active windows
+# Optionally, hide the status and input lines on chanmon
 #
-# /window splith 70 --> open the chanmon buffer
-# /set weechat.bar.status.conditions "active"
-# /set weechat.bar.input.conditions "active"
+# /window splith 70 --> change to chanmon buffer
+# /set weechat.bar.status.conditions "${window.buffer.full_name} != perl.chanmon"
+# /set weechat.bar.input.conditions "${window.buffer.full_name} != perl.chanmon"
 #
 
 # Bugs and feature requests at: https://github.com/KenjiE20/chanmon
@@ -241,11 +241,11 @@ Command wrapper for chanmon commands
 
 ".weechat::color("bold")."Example set up:".weechat::color("-bold")."
 Split the layout 70/30 (or there abouts) horizontally and load
-Optionally, make the status and input lines only show on active windows
+Optionally, hide the status and input lines on chanmon
 
-".weechat::color("bold")."/window splith 70 --> open the chanmon buffer".weechat::color("-bold")."
-".weechat::color("bold")."/set weechat.bar.status.conditions \"active\"".weechat::color("-bold")."
-".weechat::color("bold")."/set weechat.bar.input.conditions \"active\"".weechat::color("-bold");
+".weechat::color("bold")."/window splith 70".weechat::color("-bold")." --> change to chanmon buffer
+".weechat::color("bold")."/set weechat.bar.status.conditions \"\${window.buffer.full_name} != perl.chanmon\"".weechat::color("-bold")."
+".weechat::color("bold")."/set weechat.bar.input.conditions \"\${window.buffer.full_name} != perl.chanmon\"".weechat::color("-bold");
 # Print verbose help
 sub print_help
 {
