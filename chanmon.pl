@@ -520,6 +520,15 @@ sub chanmon_config_clean
 # Check config elements
 sub chanmon_config_init
 {
+	# First run default
+	if (!(weechat::config_is_set_plugin ("first_run")))
+	{
+		if (weechat::config_get_plugin("first_run") ne "true")
+		{
+			weechat::print("", "\tThis appears to be the first time chanmon has been run. For help and common set up hints see /chanmon help");
+			weechat::config_set_plugin("first_run", "true");
+		}
+	}
 	# Alignment default
 	if (!(weechat::config_is_set_plugin ("alignment")))
 	{
