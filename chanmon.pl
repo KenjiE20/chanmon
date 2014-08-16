@@ -7,7 +7,7 @@
 # i.e. In a seperate window beneath the main channel buffer
 #
 # Usage:
-# /chanmon [help] | [monitor [channel [server]]] | [dynmon] | [clean default|orphan|all]
+# /chanmon [help] | [monitor [channel [server]]] | [dynmon] | [clean default|orphan|all] | clearbar
 #  Command wrapper for chanmon commands
 #
 # /chmonitor [channel] [server] is used to toggle a channel monitoring on and off, this
@@ -20,6 +20,8 @@
 #
 # /chanclean default|orphan|all will clean the config section of default 'on' entries,
 #  channels you are no longer joined, or both
+#
+# /chanmon clearbar will clear the contents of chanmon's bar output
 #
 # /set plugins.var.perl.chanmon.alignment
 #  The config setting "alignment" can be changed to;
@@ -186,7 +188,7 @@
 @bar_lines = ();
 @bar_lines_time = ();
 # Replicate info earlier for in-client help
-$chanmonhelp = weechat::color("bold")."/chanmon [help] | [monitor [channel [server]]] | [dynmon] | [clean default|orphan|all]".weechat::color("-bold")."
+$chanmonhelp = weechat::color("bold")."/chanmon [help] | [monitor [channel [server]]] | [dynmon] | [clean default|orphan|all] | clearbar".weechat::color("-bold")."
 Command wrapper for chanmon commands
 
 ".weechat::color("bold")."/chmonitor [channel] [server]".weechat::color("-bold")." is used to toggle a channel monitoring on and off, this
@@ -195,6 +197,8 @@ Command wrapper for chanmon commands
 ".weechat::color("bold")."/dynmon".weechat::color("-bold")." is used to toggle 'Dynamic Channel Monitoring' on and off, this will automagically stop monitoring the current active buffer, without affecting regular settings (Default is off)
 
 ".weechat::color("bold")."/chanclean".weechat::color("-bold")." default|orphan|all will clean the config section of default 'on' entries, channels you are no longer joined, or both
+
+".weechat::color("bold")."/chanmon clearbar".weechat::color("-bold")." will clear the contents of chanmon's bar output
 
 ".weechat::color("bold")."/set plugins.var.perl.chanmon.alignment".weechat::color("-bold")."
  The config setting \"alignment\" can be changed to;
