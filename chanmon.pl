@@ -949,7 +949,7 @@ sub chanmon_print
 		}
 		else
 		{
-			weechat::print($chanmon_buffer, $outstr)
+			weechat::print($chanmon_buffer, $outstr);
 		}
 	}
 	elsif (weechat::config_get_plugin("output") eq "bar")
