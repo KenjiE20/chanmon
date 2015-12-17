@@ -78,6 +78,7 @@
 
 # History:
 # 2015-12-17, Raku <raku@rakutiki.tv>:
+#	v2.5.1: -feature: Add "bar_scrolldown" option to have the bar display the latest message at anytime
 # 2014-08-16, KenjiE20 <longbow@longbowslair.co.uk>:
 #	v2.5:	-add: clearbar command to clear bar output
 #			-add: firstrun output prompt to check the help text for set up hints as they were being missed
